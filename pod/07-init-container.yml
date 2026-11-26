@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx-init
+    image: nginx
+    ports:
+    - name: nginx-port
+      containerPort: 80
+      protocol: TCP
+    volumeMounts:
+    - name: init-data
+      mountPath: /usr/share/nginx/html
+  initContainers:
+  - name: alpine-init
+    image: alpine
+    command:
+      - wget
+      - "-O"
+      - "/var/tmp/index.html"
+      - https://github.com/ndspriyacloud2/ndsprojects-dec26/blob/project1/web-content/index.html?raw=true
+    volumeMounts:
+    - name: init-data
+      mountPath: /var/tmp
+  volumes:
+  - name: init-data
+    emptyDir: {}
